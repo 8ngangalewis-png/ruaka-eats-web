@@ -262,8 +262,235 @@ function Hero() {
   );
 }
 
-function Menu() {
+type CartItem = { name: string; priceKsh: number; qty: number };
+
+function useCart() {
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [open, setOpen] = useState(false);
+
+  const add = (dish: { name: string; priceKsh: number }) => {
+    setItems((prev) => {
+      const found = prev.find((i) => i.name === dish.name);
+      if (found) {
+        return prev.map((i) => (i.name === dish.name ? { ...i, qty: i.qty + 1 } : i));
+      }
+      return [...prev, { name: dish.name, priceKsh: dish.priceKsh, qty: 1 }];
+    });
+    setOpen(true);
+  };
+
+  const setQty = (name: string, delta: number) =>
+    setItems((prev) =>
+      prev
+        .map((i) => (i.name === name ? { ...i, qty: i.qty + delta } : i))
+        .filter((i) => i.qty > 0),
+    );
+
+  const remove = (name: string) => setItems((prev) => prev.filter((i) => i.name !== name));
+  const clear = () => setItems([]);
+
+  const count = items.reduce((n, i) => n + i.qty, 0);
+  const total = items.reduce((n, i) => n + i.qty * i.priceKsh, 0);
+
+  return { items, open, setOpen, add, setQty, remove, clear, count, total };
+}
+
+type Cart = ReturnType<typeof useCart>;
+
+function orderMessage(items: CartItem[], total: number, name: string, note: string) {
+  const lines = items.map(
+    (i) => `• ${i.qty} × ${i.name} — Ksh ${(i.qty * i.priceKsh).toLocaleString()}`,
+  );
+  return [
+    `Hi Vivian's Kitchen! I'd like to place an order:`,
+    "",
+    ...lines,
+    "",
+    `Total: Ksh ${total.toLocaleString()}`,
+    name.trim() ? `Name: ${name.trim()}` : "",
+    note.trim() ? `Notes: ${note.trim()}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+function CartPanel({ cart }: { cart: Cart }) {
+  const [name, setName] = useState("");
+  const [note, setNote] = useState("");
+
+  const link = useMemo(
+    () =>
+      "https://wa.me/254704587546?text=" +
+      encodeURIComponent(orderMessage(cart.items, cart.total, name, note)),
+    [cart.items, cart.total, name, note],
+  );
+
   return (
+    <>
+      <button
+        type="button"
+        onClick={() => cart.setOpen(true)}
+        className="fixed right-4 bottom-4 z-40 inline-flex items-center gap-2 rounded-full bg-ember px-5 py-3.5 text-sm font-bold tracking-wide text-ember-foreground uppercase shadow-2xl transition-transform hover:scale-105"
+      >
+        <ShoppingBag className="h-5 w-5" />
+        My order
+        <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-espresso px-1.5 text-xs text-espresso-foreground">
+          {cart.count}
+        </span>
+      </button>
+
+      {cart.open && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <button
+            type="button"
+            aria-label="Close order cart"
+            onClick={() => cart.setOpen(false)}
+            className="absolute inset-0 bg-espresso/60 backdrop-blur-sm"
+          />
+          <aside className="relative flex h-full w-full max-w-md flex-col bg-card shadow-2xl">
+            <div className="flex items-center justify-between border-b p-5">
+              <h2 className="font-display text-2xl font-bold uppercase">Your order</h2>
+              <button
+                type="button"
+                onClick={() => cart.setOpen(false)}
+                aria-label="Close"
+                className="rounded-full p-2 hover:bg-secondary"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-5">
+              {cart.items.length === 0 ? (
+                <p className="text-muted-foreground">
+                  Your order is empty. Add dishes from the menu to get started.
+                </p>
+              ) : (
+                <ul className="space-y-4">
+                  {cart.items.map((item) => (
+                    <li key={item.name} className="flex items-start gap-3 border-b pb-4">
+                      <div className="flex-1">
+                        <p className="font-semibold">{item.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Ksh {item.priceKsh.toLocaleString()} each
+                        </p>
+                        <div className="mt-2 inline-flex items-center gap-3 rounded-full border px-2 py-1">
+                          <button
+                            type="button"
+                            aria-label={`Remove one ${item.name}`}
+                            onClick={() => cart.setQty(item.name, -1)}
+                            className="rounded-full p-1 hover:bg-secondary"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <span className="w-5 text-center text-sm font-semibold">{item.qty}</span>
+                          <button
+                            type="button"
+                            aria-label={`Add one ${item.name}`}
+                            onClick={() => cart.setQty(item.name, 1)}
+                            className="rounded-full p-1 hover:bg-secondary"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-display text-lg font-bold text-ember">
+                          Ksh {(item.qty * item.priceKsh).toLocaleString()}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => cart.remove(item.name)}
+                          className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" /> Remove
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {cart.items.length > 0 && (
+                <div className="mt-6 space-y-3">
+                  <div>
+                    <label htmlFor="cart-name" className="text-sm font-semibold">
+                      Your name
+                    </label>
+                    <input
+                      id="cart-name"
+                      value={name}
+                      maxLength={60}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="e.g. Amina"
+                      className="mt-1 w-full rounded-lg border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="cart-note" className="text-sm font-semibold">
+                      Delivery address / notes
+                    </label>
+                    <textarea
+                      id="cart-note"
+                      value={note}
+                      maxLength={500}
+                      rows={3}
+                      onChange={(e) => setNote(e.target.value)}
+                      placeholder="Deliver to Ruaka, near…"
+                      className="mt-1 w-full resize-y rounded-lg border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="border-t p-5">
+              <div className="flex items-center justify-between">
+                <span className="text-sm tracking-widest text-muted-foreground uppercase">
+                  Total
+                </span>
+                <span className="font-display text-3xl font-bold text-ember">
+                  Ksh {cart.total.toLocaleString()}
+                </span>
+              </div>
+              <a
+                href={cart.items.length ? link : undefined}
+                target="_blank"
+                rel="noreferrer"
+                aria-disabled={cart.items.length === 0}
+                className={`mt-4 flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-bold tracking-wide uppercase transition-transform ${
+                  cart.items.length
+                    ? "bg-ember text-ember-foreground hover:scale-[1.02]"
+                    : "pointer-events-none bg-muted text-muted-foreground"
+                }`}
+              >
+                <MessageCircle className="h-4 w-4" /> Send order on WhatsApp
+              </a>
+              <div className="mt-3 flex items-center justify-between text-xs">
+                <a href={PHONE_TEL} className="font-semibold text-ember hover:underline">
+                  Or call {PHONE_DISPLAY}
+                </a>
+                {cart.items.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={cart.clear}
+                    className="text-muted-foreground hover:text-destructive"
+                  >
+                    Clear order
+                  </button>
+                )}
+              </div>
+            </div>
+          </aside>
+        </div>
+      )}
+    </>
+  );
+}
+
+function Menu({ onAdd }: { onAdd: (d: { name: string; priceKsh: number }) => void }) {
+  return (
+
     <section id="menu" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
       <p className="text-sm font-bold tracking-[0.25em] text-ember uppercase">Menu highlights</p>
       <h2 className="mt-2 font-display text-4xl font-bold uppercase sm:text-5xl">
