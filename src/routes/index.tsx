@@ -683,6 +683,20 @@ function FullMenu({ onAdd }: { onAdd: (d: { name: string; priceKsh: number }) =>
                   </li>
                 ))}
               </ul>
+              <div className="mt-5 flex flex-col items-center gap-3 rounded-2xl bg-secondary p-5 text-center">
+                <p className="text-sm text-secondary-foreground">
+                  Craving something else? Ask us — the kitchen might just have it today.
+                </p>
+                <a
+                  href={WHATSAPP}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-ember px-5 py-2.5 text-xs font-bold tracking-wide text-ember-foreground uppercase shadow-md transition-transform hover:scale-105"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Ask about today's specials
+                </a>
+              </div>
             </div>
           ))}
         </div>
