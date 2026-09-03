@@ -532,6 +532,13 @@ function Menu({ onAdd }: { onAdd: (d: { name: string; priceKsh: number }) => voi
                 </span>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{dish.desc}</p>
+              <button
+                type="button"
+                onClick={() => onAdd(dish)}
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-ember px-5 py-2.5 text-sm font-bold tracking-wide text-ember-foreground uppercase transition-transform hover:scale-[1.02]"
+              >
+                <Plus className="h-4 w-4" /> Add to order
+              </button>
             </div>
           </article>
         ))}
@@ -642,6 +649,84 @@ function Reviews() {
   );
 }
 
+function EnquiryForm() {
+  const [name, setName] = useState("");
+  const [guests, setGuests] = useState("2");
+  const [message, setMessage] = useState("Table for lunch at 1 PM, please.");
+
+  const link =
+    "https://wa.me/254704587546?text=" +
+    encodeURIComponent(
+      [
+        "Hi Vivian's Kitchen!",
+        name.trim() ? `Name: ${name.trim()}` : "",
+        guests.trim() ? `Guests: ${guests.trim()}` : "",
+        message.trim() ? `Message: ${message.trim()}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    );
+
+  return (
+    <div className="mt-12 rounded-2xl border border-cream/15 bg-cream/5 p-6 sm:p-8">
+      <h3 className="font-display text-2xl font-bold uppercase">Send an enquiry</h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-espresso-foreground/75">
+        Booking a table or ordering ahead? Send us a message on WhatsApp and we'll reply fast.
+      </p>
+      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="enq-name" className="text-sm font-semibold">
+            Your name
+          </label>
+          <input
+            id="enq-name"
+            value={name}
+            maxLength={60}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="e.g. Amina"
+            className="mt-1.5 w-full rounded-lg border border-cream/20 bg-espresso/40 px-3 py-2.5 text-sm text-espresso-foreground outline-none placeholder:text-espresso-foreground/40 focus:ring-2 focus:ring-star"
+          />
+        </div>
+        <div>
+          <label htmlFor="enq-guests" className="text-sm font-semibold">
+            Number of guests
+          </label>
+          <input
+            id="enq-guests"
+            type="number"
+            min={1}
+            max={50}
+            value={guests}
+            onChange={(e) => setGuests(e.target.value)}
+            className="mt-1.5 w-full rounded-lg border border-cream/20 bg-espresso/40 px-3 py-2.5 text-sm text-espresso-foreground outline-none focus:ring-2 focus:ring-star"
+          />
+        </div>
+      </div>
+      <div className="mt-4">
+        <label htmlFor="enq-message" className="text-sm font-semibold">
+          Message
+        </label>
+        <textarea
+          id="enq-message"
+          rows={4}
+          maxLength={800}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="mt-1.5 w-full resize-y rounded-lg border border-cream/20 bg-espresso/40 px-3 py-2.5 text-sm text-espresso-foreground outline-none placeholder:text-espresso-foreground/40 focus:ring-2 focus:ring-star"
+        />
+      </div>
+      <a
+        href={link}
+        target="_blank"
+        rel="noreferrer"
+        className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 text-sm font-bold tracking-wide text-espresso uppercase transition-transform hover:scale-[1.01]"
+      >
+        <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+      </a>
+    </div>
+  );
+}
+
 function Contact() {
   return (
     <section id="contact" className="scroll-mt-20 bg-espresso py-20 text-espresso-foreground">
@@ -696,6 +781,7 @@ function Contact() {
             </span>
           </div>
         </div>
+        <EnquiryForm />
         <div className="mt-12 flex flex-col items-center gap-4 rounded-2xl bg-ember p-10 text-center text-ember-foreground">
           <Leaf className="h-8 w-8" />
           <h3 className="font-display text-3xl font-bold uppercase">
@@ -740,16 +826,18 @@ function Footer() {
 }
 
 function Home() {
+  const cart = useCart();
   return (
     <div className="min-h-screen">
       <Hero />
       <main>
-        <Menu />
+        <Menu onAdd={cart.add} />
         <About />
         <Reviews />
         <Contact />
       </main>
       <Footer />
+      <CartPanel cart={cart} />
     </div>
   );
 }
