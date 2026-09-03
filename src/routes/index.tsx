@@ -658,6 +658,21 @@ function FullMenu({ onAdd }: { onAdd: (d: { name: string; priceKsh: number }) =>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
           From breakfast to fresh juices — tap any item to add it to your order.
         </p>
+        <div className="mt-8 flex flex-col items-center gap-4 rounded-2xl bg-card p-8 text-center shadow-sm">
+          <p className="text-card-foreground">
+            Craving something else? Browse the full menu below — breakfast, accompaniments,
+            soft drinks and fresh juices served all day.
+          </p>
+          <a
+            href={WHATSAPP}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-ember px-6 py-3 text-sm font-bold tracking-wide text-ember-foreground uppercase shadow-lg transition-transform hover:scale-105"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Ask about today's specials
+          </a>
+        </div>
         <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {fullMenu.map((group) => (
             <div key={group.category} className="rounded-2xl border bg-card p-6 shadow-sm">
@@ -683,20 +698,6 @@ function FullMenu({ onAdd }: { onAdd: (d: { name: string; priceKsh: number }) =>
                   </li>
                 ))}
               </ul>
-              <div className="mt-5 flex flex-col items-center gap-3 rounded-2xl bg-secondary p-5 text-center">
-                <p className="text-sm text-secondary-foreground">
-                  Craving something else? Ask us — the kitchen might just have it today.
-                </p>
-                <a
-                  href={WHATSAPP}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-ember px-5 py-2.5 text-xs font-bold tracking-wide text-ember-foreground uppercase shadow-md transition-transform hover:scale-105"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  Ask about today's specials
-                </a>
-              </div>
             </div>
           ))}
         </div>
