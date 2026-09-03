@@ -961,6 +961,7 @@ function Home() {
       <Hero />
       <main>
         <Menu onAdd={cart.add} />
+        <FullMenu onAdd={cart.add} />
         <About />
         <Reviews />
         <Contact />
