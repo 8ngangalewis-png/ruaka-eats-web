@@ -545,7 +545,8 @@ function Menu({ onAdd }: { onAdd: (d: { name: string; priceKsh: number }) => voi
       </div>
       <div className="mt-10 flex flex-col items-center gap-4 rounded-2xl bg-secondary p-8 text-center">
         <p className="text-secondary-foreground">
-          Full menu available in-house — vegetarian and lighter options served all day.
+          Craving something else? Browse the full menu below — breakfast, accompaniments,
+          soft drinks and fresh juices served all day.
         </p>
         <a
           href={WHATSAPP}
@@ -556,6 +557,135 @@ function Menu({ onAdd }: { onAdd: (d: { name: string; priceKsh: number }) => voi
           <MessageCircle className="h-4 w-4" />
           Ask about today's specials
         </a>
+      </div>
+    </section>
+  );
+}
+
+const fullMenu: { category: string; items: { name: string; priceKsh: number }[] }[] = [
+  {
+    category: "Breakfast",
+    items: [
+      { name: "Andazi", priceKsh: 20 },
+      { name: "Toast bread", priceKsh: 100 },
+      { name: "Chapati", priceKsh: 50 },
+      { name: "Pair of sausages", priceKsh: 140 },
+      { name: "Pair of samosas", priceKsh: 100 },
+      { name: "Eggs (to your liking)", priceKsh: 100 },
+      { name: "Coffee", priceKsh: 100 },
+      { name: "African tea", priceKsh: 100 },
+      { name: "Hot chocolate", priceKsh: 100 },
+      { name: "Porridge", priceKsh: 100 },
+      { name: "Milk", priceKsh: 100 },
+      { name: "Arrow roots", priceKsh: 150 },
+      { name: "Sweet potato", priceKsh: 150 },
+      { name: "Pair of pancakes", priceKsh: 100 },
+      { name: "Pot of tea", priceKsh: 200 },
+    ],
+  },
+  {
+    category: "Main dishes",
+    items: [
+      { name: "Beef wet fry", priceKsh: 450 },
+      { name: "Whole tilapia — wet or dry", priceKsh: 600 },
+      { name: "Coconut fish", priceKsh: 650 },
+      { name: "Chicken wet fry (portion)", priceKsh: 500 },
+      { name: "Grilled chicken (portion)", priceKsh: 500 },
+      { name: "Liver", priceKsh: 450 },
+      { name: "Minced meat", priceKsh: 450 },
+      { name: "Matumbo wet fry", priceKsh: 450 },
+      { name: "Chicken biriani", priceKsh: 550 },
+      { name: "Egg curry", priceKsh: 400 },
+      { name: "Chicken curry", priceKsh: 550 },
+      { name: "Pilau plain", priceKsh: 400 },
+      { name: "Pilau + beef stew", priceKsh: 600 },
+      { name: "Chicken fingers", priceKsh: 350 },
+      { name: "Fish fingers", priceKsh: 350 },
+      { name: "Beans", priceKsh: 200 },
+      { name: "Ndengu", priceKsh: 200 },
+      { name: "Githeri", priceKsh: 300 },
+      { name: "Salad", priceKsh: 350 },
+      { name: "Chicken salad", priceKsh: 500 },
+      { name: "Omena fry", priceKsh: 200 },
+    ],
+  },
+  {
+    category: "Accompaniments",
+    items: [
+      { name: "Chips plain / seasoned", priceKsh: 150 },
+      { name: "Chips masala", priceKsh: 250 },
+      { name: "Ugali — white / brown", priceKsh: 100 },
+      { name: "White rice", priceKsh: 100 },
+      { name: "Veg. rice", priceKsh: 100 },
+      { name: "Mokimo", priceKsh: 100 },
+      { name: "Potato wedges", priceKsh: 250 },
+      { name: "Sauté", priceKsh: 250 },
+      { name: "Mashed potato", priceKsh: 200 },
+      { name: "Bhajia", priceKsh: 300 },
+    ],
+  },
+  {
+    category: "Soft drinks",
+    items: [
+      { name: "Coke", priceKsh: 100 },
+      { name: "Sprite", priceKsh: 100 },
+      { name: "Fanta", priceKsh: 100 },
+      { name: "Stoney", priceKsh: 100 },
+      { name: "Fanta passion", priceKsh: 100 },
+    ],
+  },
+  {
+    category: "Fresh juices",
+    items: [
+      { name: "Mango", priceKsh: 150 },
+      { name: "Pineapple", priceKsh: 150 },
+      { name: "Passion", priceKsh: 150 },
+      { name: "Orange", priceKsh: 150 },
+      { name: "Apple", priceKsh: 150 },
+      { name: "Tropical mix", priceKsh: 150 },
+    ],
+  },
+];
+
+function FullMenu({ onAdd }: { onAdd: (d: { name: string; priceKsh: number }) => void }) {
+  return (
+    <section id="full-menu" className="scroll-mt-20 bg-secondary py-20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <p className="text-sm font-bold tracking-[0.25em] text-ember uppercase">Full menu</p>
+        <h2 className="mt-2 font-display text-4xl font-bold uppercase sm:text-5xl">
+          Everything we serve, all day
+        </h2>
+        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          From breakfast to fresh juices — tap any item to add it to your order.
+        </p>
+        <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {fullMenu.map((group) => (
+            <div key={group.category} className="rounded-2xl border bg-card p-6 shadow-sm">
+              <h3 className="font-display text-2xl font-bold uppercase text-ember">
+                {group.category}
+              </h3>
+              <ul className="mt-4 divide-y divide-border">
+                {group.items.map((item) => (
+                  <li key={item.name} className="flex items-center gap-3 py-2.5">
+                    <span className="text-sm font-medium">{item.name}</span>
+                    <span className="mx-1 flex-1 border-b border-dotted border-muted-foreground/40" />
+                    <span className="font-display text-base font-bold whitespace-nowrap text-ember">
+                      Ksh {item.priceKsh.toLocaleString()}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => onAdd(item)}
+                      aria-label={`Add ${item.name} to order`}
+                      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ember text-ember-foreground transition-transform hover:scale-110"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -832,6 +962,7 @@ function Home() {
       <Hero />
       <main>
         <Menu onAdd={cart.add} />
+        <FullMenu onAdd={cart.add} />
         <About />
         <Reviews />
         <Contact />
