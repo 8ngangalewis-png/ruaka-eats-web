@@ -545,7 +545,8 @@ function Menu({ onAdd }: { onAdd: (d: { name: string; priceKsh: number }) => voi
       </div>
       <div className="mt-10 flex flex-col items-center gap-4 rounded-2xl bg-secondary p-8 text-center">
         <p className="text-secondary-foreground">
-          Full menu available in-house — vegetarian and lighter options served all day.
+          Craving something else? Browse the full menu below — breakfast, accompaniments,
+          soft drinks and fresh juices served all day.
         </p>
         <a
           href={WHATSAPP}
