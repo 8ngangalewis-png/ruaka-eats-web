@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Clock,
@@ -10,6 +11,11 @@ import {
   Wallet,
   MessageCircle,
   Navigation,
+  Plus,
+  Minus,
+  ShoppingBag,
+  Trash2,
+  X,
 } from "lucide-react";
 
 import heroImg from "@/assets/hero-chicken-fries.jpg";
@@ -59,6 +65,7 @@ const dishes = [
     popular: true,
     name: "Chicken & Fries",
     price: "Ksh 650",
+    priceKsh: 650,
     desc: "Crispy golden fried chicken with thick-cut fries, kachumbari and our house chilli sauce.",
   },
   {
@@ -67,6 +74,7 @@ const dishes = [
     popular: true,
     name: "Chicken Pilau",
     price: "Ksh 700",
+    priceKsh: 700,
     desc: "Fragrant spiced rice slow-cooked with tender chicken, served with kachumbari and soup.",
   },
   {
@@ -75,6 +83,7 @@ const dishes = [
     popular: false,
     name: "Ugali, Sukuma & Beef Stew",
     price: "Ksh 500",
+    priceKsh: 500,
     desc: "The hearty Kenyan lunch plate — rich beef stew, tender greens and fresh ugali.",
   },
   {
@@ -83,6 +92,7 @@ const dishes = [
     popular: true,
     name: "Nyama Choma Platter",
     price: "Ksh 1,200",
+    priceKsh: 1200,
     desc: "Slow-grilled meat served on a board with kachumbari and a side of your choice.",
   },
   {
@@ -91,6 +101,7 @@ const dishes = [
     popular: false,
     name: "Chapati & Beans",
     price: "Ksh 350",
+    priceKsh: 350,
     desc: "Soft, flaky chapatis with slow-simmered bean stew — simple, filling and full of flavour.",
   },
   {
@@ -99,6 +110,7 @@ const dishes = [
     popular: false,
     name: "Whole Fried Tilapia",
     price: "Ksh 1,100",
+    priceKsh: 1100,
     desc: "Crisp-fried tilapia with ugali or rice and sautéed greens. Fresh in every morning.",
   },
   {
@@ -107,6 +119,7 @@ const dishes = [
     popular: false,
     name: "Samosas & Chai",
     price: "Ksh 250",
+    priceKsh: 250,
     desc: "Three beef samosas with tamarind dip and a hot cup of spiced Kenyan chai.",
   },
 ];
