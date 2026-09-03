@@ -719,7 +719,7 @@ function EnquiryForm() {
         href={link}
         target="_blank"
         rel="noreferrer"
-        className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 text-sm font-bold tracking-wide text-espresso uppercase transition-transform hover:scale-[1.01]"
+        className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-whatsapp px-6 py-3.5 text-sm font-bold tracking-wide text-espresso uppercase transition-transform hover:scale-[1.01]"
       >
         <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
       </a>

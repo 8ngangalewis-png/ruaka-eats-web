@@ -37,6 +37,7 @@
   --color-cream: var(--cream);
   --color-espresso: var(--espresso);
   --color-espresso-foreground: var(--espresso-foreground);
+  --color-whatsapp: var(--whatsapp);
   --font-display: "Barlow Condensed", sans-serif;
   --font-sans: "DM Sans", sans-serif;
 }
@@ -68,6 +69,7 @@
   --cream: oklch(0.965 0.018 85);
   --espresso: oklch(0.22 0.03 45);
   --espresso-foreground: oklch(0.95 0.02 85);
+  --whatsapp: oklch(0.72 0.17 150);
 }
 
 @layer base {
